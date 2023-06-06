@@ -16,7 +16,9 @@ import java.util.List;
 @RequestMapping("vicedean")
 @RequiredArgsConstructor
 public class ViceDeanController {
-
+        /*
+        biz bu projeyi yazmaya en hafiften basladik. iliskileri olmayan entityden once 1 sonra 2 diye ilerliyor. Genelde de bu sekilde yapilir.
+         */
     private final ViceDeanService viceDeanService;
 
     //************************************ save() ******************************
