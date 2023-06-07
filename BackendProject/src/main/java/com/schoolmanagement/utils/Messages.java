@@ -27,6 +27,11 @@ public class Messages {// applicationumuzdaki tum messagelerimizi burda olusturu
 
     public static final String NOT_FOUND_LESSON_MESSAGE = "Error: Lesson with this field %s not found" ;
 
+    //lessonProgram
+
+    public static final String NOT_FOUND_LESSON_IN_LIST = "Error: Lesson not found in the list" ;
+
+    public static final String TIME_NOT_VALID_MESSAGE = "Error: incorrect time" ;
 
 
 

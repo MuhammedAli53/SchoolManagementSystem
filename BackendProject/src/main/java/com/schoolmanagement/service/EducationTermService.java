@@ -147,4 +147,13 @@ public class EducationTermService {
                 .object(createEducationTermResponse(updated)).build();
 
     }
+        // bu method lessonservice classinda kullanildi. getById methodunda
+    public EducationTerm getById(Long educationTermId) {
+
+
+        if (!educationTermRepository.existsByIdEquals(educationTermId)){
+            throw new ResourceNotFoundException(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE);
+        }
+        return educationTermRepository.findByIdEquals(educationTermId);
+    }
 }
