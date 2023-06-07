@@ -12,7 +12,7 @@ public class Messages {// applicationumuzdaki tum messagelerimizi burda olusturu
 
     public static final String NOT_FOUND_USER2_MESSAGE = "Error: User not found with id %s" ;
 
-
+    //education
     public static final String EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE = "Error: The start date cannot be earlier than th last registration date " ;
 
     public static final String EDUCATION_END_DATE_IS_EARLIER_THAN_START_DATE = "Error: The end date cannot be earlier than the start date " ;
@@ -20,6 +20,15 @@ public class Messages {// applicationumuzdaki tum messagelerimizi burda olusturu
     public static final String EDUCATION_TERM_IS_ALREADY_EXIST_BY_TERM_AND_YEAR_MESSAGE = "Error: Education Term with Term And Year already exist " ;
 
     public static final String EDUCATION_TERM_NOT_FOUND_MESSAGE = "Error: Education Term with id %s not found" ;
+
+    //lesson
+
+    public static final String ALREADY_REGISTER_LESSON_MESSAGE = "Error: Lesson with lesson name %s already registered" ;
+
+    public static final String NOT_FOUND_LESSON_MESSAGE = "Error: Lesson with this field %s not found" ;
+
+
+
 
 
 

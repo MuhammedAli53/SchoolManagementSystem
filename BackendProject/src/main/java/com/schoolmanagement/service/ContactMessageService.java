@@ -33,14 +33,14 @@ public class ContactMessageService {
     public ResponseMessage<ContactMessageResponse> save(ContactMessageRequest contactMessageRequest) {
         // bir kullanici bir gunde sadece 1 message gonderebilsin. Bu bizim requestimiz. Bunu kontrol etmemiz lazim.
         //bunun icin email uzerinden kontrol yapicaz ve gunluk kontrolu de date uzerinden kontrol edicez.
-         boolean isSameMessageWithSameEmailForToday =
+         /*boolean isSameMessageWithSameEmailForToday =
                  contactMessageRepository.existsByEmailEqualsAndDateEquals(contactMessageRequest.getEmail(),LocalDate.now());
                          //contactMessageRequest da email bilgisi var get yap. date bilgisine nasil ulasicaz? bugunu aliyoruz :D
                          // dbdeki gunle bugun ayni mi. exist ile basliyor methodumuz bu nedenle bu bir boolean type.
                          // peki repodaki bu methodun icine bir sey yaziyor muyuz? hayiz. Exists, by, equals, and, equals. bunlar keywordler.
                          //JPA bu keywordleri anlar.                                                            LocalDate.now());
 
-         if(isSameMessageWithSameEmailForToday) throw new ConflictException(String.format(ALREADY_SEND_A_MESSAGE_TODAY));
+         if(isSameMessageWithSameEmailForToday) throw new ConflictException(String.format(ALREADY_SEND_A_MESSAGE_TODAY));*/
         //exception mesajinin adini yaz ve alt enter a bas. Class adini yazmana gerek yok yani. Yukarda import etti zaten.
 
         // kaydedilmis datayi saveledik ve aldik bu datayi. Response olarak cevirirken de bunu kullanicaz.

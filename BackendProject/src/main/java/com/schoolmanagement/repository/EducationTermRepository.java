@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface EducationTermRepository extends JpaRepository<EducationTerm,Long> {
     @Query("SELECT (count(e) > 0 ) FROM EducationTerm e WHERE e.term=?1 AND EXTRACT(YEAR FROM e.startDate) = ?2")
-        // EXTRACT sql sorgularinda tarihleri ayiklamak icin kullanilan bir keyword. Sacede tarih ve saat querylerinde yazilir.
+        // EXTRACT sql sorgularinda tarihleri ayiklamak icin kullanilan bir keyword. Sadece tarih ve saat querylerinde yazilir.
     boolean existsByTermAndYear(Term term, int year);
 
     @Query("SELECT (count(e)>0) FROM EducationTerm e WHERE e.id= ?1")

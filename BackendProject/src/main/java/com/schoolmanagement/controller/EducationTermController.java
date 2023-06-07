@@ -55,10 +55,10 @@ public class EducationTermController {
         return educationTermService.getAllWithPage(page,size,sort,type);
     }
 
-/*
+
     // ********************** delete() ***************************
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
-    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    @DeleteMapping("/delete/{id}") // http://localhost:8080/educationTerms/delete/1
     public ResponseMessage<?> delete(@PathVariable Long id){
         return educationTermService.delete(id);
     }
@@ -66,8 +66,8 @@ public class EducationTermController {
 
     // **************************** updateById() **********************
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
-    @PutMapping("/updateById/{id}")
-    public ResponseMessage<EducationTermResponse> updateById(@Valid @RequestBody EducationTermRequest educationTermRequest, @PathVariable Long id){
-        return educationTermService.updateById(educationTermRequest,id);
-    }*/
+    @PutMapping("/update/{id}") // http://localhost:8080/educationTerms/update/1
+    public ResponseMessage<EducationTermResponse> update(@Valid @RequestBody EducationTermRequest educationTermRequest, @PathVariable Long id){
+        return educationTermService.update(id,educationTermRequest);
+    }
 }

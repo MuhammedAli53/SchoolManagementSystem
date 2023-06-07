@@ -32,35 +32,56 @@ public class EducationTermService {
         if (request.getLastRegistrationDate().isAfter(request.getStartDate())) {
             throw new ResourceNotFoundException(Messages.EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE);
         }
+
         //bitis tarihi baslangic tarihinden once olmamali.
         if (request.getEndDate().isBefore(request.getStartDate())) {
             throw new ResourceNotFoundException(Messages.EDUCATION_END_DATE_IS_EARLIER_THAN_START_DATE);
         }
+
         // ayni term ve baslangic tarihine sahip birden fazla kayit var mi kontrol et. burda senelik kontrol yapicaz. 2023 senesinde 1 tane guz donemi olur.
         if (educationTermRepository.existsByTermAndYear(request.getTerm(), request.getStartDate().getYear())) {
             // bu method turemez. year data turu yok bizim fieldlerde. Mecburen native query yazicaz.
             throw new ResourceNotFoundException(Messages.EDUCATION_TERM_IS_ALREADY_EXIST_BY_TERM_AND_YEAR_MESSAGE);
         }
+
         //save methoduna dto pojo donusumu yapip gonderiyoruz.
         EducationTerm savedEducationTerm = educationTermRepository.save(createEducationTerm(request));
 
         //response objesi olusturuluyor.
-        return ResponseMessage.<EducationTermResponse>builder().message("Education Term created").httpStatus(HttpStatus.CREATED).object(createEducationTermResponse(savedEducationTerm)).build();
+        return ResponseMessage.<EducationTermResponse>builder()
+                .message("Education Term created")
+                .httpStatus(HttpStatus.CREATED)
+                .object(createEducationTermResponse(savedEducationTerm))
+                .build();
     }
 
     private EducationTerm createEducationTerm(EducationTermRequest request) {
-        return EducationTerm.builder().term(request.getTerm()).startDate(request.getStartDate()).
-                endDate(request.getEndDate()).lastRegistrationDate(request.getLastRegistrationDate()).build();
+        return EducationTerm.builder().
+                term(request.getTerm()).
+                startDate(request.getStartDate()).
+                endDate(request.getEndDate()).
+                lastRegistrationDate(request.getLastRegistrationDate()).
+                build();
     }
 
- /*   private EducationTerm createEducationTerm(EducationTermRequest request, Long id) {
-        return EducationTerm.builder().id(id).term(request.getTerm()).startDate(request.getStartDate()).
-                endDate(request.getEndDate()).lastRegistrationDate(request.getLastRegistrationDate()).build();
-    }*/
+    private EducationTerm createEducationTerm(Long id, EducationTermRequest request ) { // *******
+        return EducationTerm.builder()
+                .id(id)
+                .term(request.getTerm())
+                .startDate(request.getStartDate())
+                .endDate(request.getEndDate())
+                .lastRegistrationDate(request.getLastRegistrationDate())
+                .build();
+    }
 
     private EducationTermResponse createEducationTermResponse(EducationTerm response) {
-        return EducationTermResponse.builder().id(response.getId()).term(response.getTerm()).startDate(response.getStartDate()).
-                endDate(response.getEndDate()).lastRegistrationDate(response.getLastRegistrationDate()).build();
+        return EducationTermResponse.builder()
+                .id(response.getId())
+                .term(response.getTerm())
+                .startDate(response.getStartDate())
+                .endDate(response.getEndDate())
+                .lastRegistrationDate(response.getLastRegistrationDate())
+                .build();
 
     }
 
@@ -88,33 +109,42 @@ public class EducationTermService {
         if (Objects.equals(type, "desc")) {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
-        return educationTermRepository.findAll(pageable).map(this::createEducationTermResponse);
+        return educationTermRepository.findAll(pageable).map(this::createEducationTermResponse); // findAll Pojo dondurur !!!!!
     }
 
-/*    public ResponseMessage<?> delete(Long id) {
-        Optional<EducationTerm> educationTerm = educationTermRepository.findById(id);
-        if (educationTerm.isEmpty()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER2_MESSAGE));
-        }
+    public ResponseMessage<?> delete(Long id) {
+
+
+        if (!educationTermRepository.existsById(id))
+            throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE, id));
+        // idli data donduruyorsak String.formatta yazmamiz gerekir.
+
         educationTermRepository.deleteById(id);
+
         return ResponseMessage.builder().message("Education Term deleted").httpStatus(HttpStatus.OK)
                 .build();
     }
 
-    public ResponseMessage<EducationTermResponse> updateById(EducationTermRequest request, Long id) {
-        Optional<EducationTerm> educationTerm = educationTermRepository.findById(id);
-        if (educationTerm.isEmpty()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER2_MESSAGE)); // idli data yoksa excp.
-        } else if (request.getEndDate().isBefore(request.getStartDate())) {
-            throw new ResourceNotFoundException(Messages.EDUCATION_END_DATE_IS_EARLIER_THAN_START_DATE);
-        } else if (request.getLastRegistrationDate().isAfter(request.getStartDate())) {
-            throw new ResourceNotFoundException(Messages.EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE);
-        } else if (educationTermRepository.existsByTermAndYear(request.getTerm(), request.getStartDate().getYear()))
-            throw new ResourceNotFoundException(Messages.EDUCATION_TERM_IS_ALREADY_EXIST_BY_TERM_AND_YEAR_MESSAGE);
+    public ResponseMessage<EducationTermResponse> update( Long id, EducationTermRequest request) {
+        if (!educationTermRepository.existsById(id)){
+            throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE,id));
+        }
+        if (request.getStartDate()!= null && request.getLastRegistrationDate()!=null){
+            if (request.getLastRegistrationDate().isAfter(request.getStartDate())){
+                throw new ResourceNotFoundException(Messages.EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE);
+            }
+        }
+        if (request.getStartDate()!=null && request.getEndDate()!=null){
+            if (request.getEndDate().isBefore(request.getStartDate())){
+                throw new ResourceNotFoundException(Messages.EDUCATION_END_DATE_IS_EARLIER_THAN_START_DATE);
+            }
+        }
+        ResponseMessage.ResponseMessageBuilder<EducationTermResponse> responseMessageBuilder = ResponseMessage.builder(); // bos obje olusturduk
 
-        EducationTerm updatedData = createEducationTerm(request, id);
-        EducationTerm savedData = educationTermRepository.save(updatedData);
-        return ResponseMessage.<EducationTermResponse>builder().message("Education term updated").httpStatus(HttpStatus.OK).object(createEducationTermResponse(savedData)).build();
+        EducationTerm updated = createEducationTerm(id, request);
+        educationTermRepository.save(updated);
+        return responseMessageBuilder.message("Education term updated")
+                .object(createEducationTermResponse(updated)).build();
 
-    }*/
+    }
 }
