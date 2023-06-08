@@ -88,9 +88,10 @@ public class EducationTermService {
     public EducationTermResponse get(Long id) {
 
         // ya id yoksa ?
-        if (!educationTermRepository.existsByIdEquals(id)) {
+        checkEducationTermExists(id);
+        /*if (!educationTermRepository.existsByIdEquals(id)) {
             throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE, id));
-        } //existsById isimizi gorur aslinda. ama query yazalim dedik.
+        } //existsById isimizi gorur aslinda. ama query yazalim dedik.*/
 
         return createEducationTermResponse(educationTermRepository.findByIdEquals(id));
 
@@ -114,10 +115,10 @@ public class EducationTermService {
 
     public ResponseMessage<?> delete(Long id) {
 
-
-        if (!educationTermRepository.existsById(id))
+        checkEducationTermExists(id);
+        /*if (!educationTermRepository.existsById(id))
             throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE, id));
-        // idli data donduruyorsak String.formatta yazmamiz gerekir.
+        // idli data donduruyorsak String.formatta yazmamiz gerekir.*/
 
         educationTermRepository.deleteById(id);
 
@@ -126,9 +127,10 @@ public class EducationTermService {
     }
 
     public ResponseMessage<EducationTermResponse> update( Long id, EducationTermRequest request) {
-        if (!educationTermRepository.existsById(id)){
+       /* if (!educationTermRepository.existsById(id)){
             throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE,id));
-        }
+        }*/
+        checkEducationTermExists(id);
         if (request.getStartDate()!= null && request.getLastRegistrationDate()!=null){
             if (request.getLastRegistrationDate().isAfter(request.getStartDate())){
                 throw new ResourceNotFoundException(Messages.EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE);
@@ -150,10 +152,16 @@ public class EducationTermService {
         // bu method lessonservice classinda kullanildi. getById methodunda
     public EducationTerm getById(Long educationTermId) {
 
-
-        if (!educationTermRepository.existsByIdEquals(educationTermId)){
-            throw new ResourceNotFoundException(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE);
-        }
+        checkEducationTermExists(educationTermId);
+       /* if (!educationTermRepository.existsByIdEquals(educationTermId)){
+            throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE, educationTermId));
+        }*/
         return educationTermRepository.findByIdEquals(educationTermId);
+    }
+
+    private void checkEducationTermExists(Long id){
+        if (!educationTermRepository.existsByIdEquals(id)){
+            throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE, id));
+        }
     }
 }

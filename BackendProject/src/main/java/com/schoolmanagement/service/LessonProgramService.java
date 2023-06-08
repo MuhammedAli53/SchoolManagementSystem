@@ -48,11 +48,11 @@ public class LessonProgramService {
             throw new BadRequestException(Messages.TIME_NOT_VALID_MESSAGE);
         }
         LessonProgram lessonProgram = lessonProgramRequestToDto(request,lessons);
-        // educationterm suanda setlenmis degil. Setlememiz laziö
+        // educationterm suanda setlenmis degil. Setlememiz lazim
         lessonProgram.setEducationTerm(educationTerm);
-        lessonProgramRepository.save(lessonProgram);
+        LessonProgram savedLessonProgram = lessonProgramRepository.save(lessonProgram);
         return ResponseMessage.<LessonProgramResponse>builder().message("Lesson Program is created").
-                object(createLessonProgramResponseForSaveMethod(lessonProgram)).httpStatus(HttpStatus.CREATED).build();
+                object(createLessonProgramResponseForSaveMethod(savedLessonProgram)).httpStatus(HttpStatus.CREATED).build();
 
     }
 
@@ -81,7 +81,7 @@ public class LessonProgramService {
                 .stopTime(lessonProgram.getStopTime())
                 .lessonProgramId(lessonProgram.getId())
                 .lessonName(lessonProgram.getLesson())
-                //TODO Teacher ve Student yazilinca buraya ekleme yapilacak
+                //TODO Teacher ve Student yazilinca buraya ekleme yapilacak. yukardaki response ceviren methodla ayni islevde aslinda. Overloading yapiyoruz.
                 .build();
     }
 
@@ -104,6 +104,7 @@ public class LessonProgramService {
 
     public List<LessonProgramResponse> getAllLessonProgramAssigned() {
         return lessonProgramRepository.findByTeachers_IdNotNull().stream().map(this::createLessonProgramResponse).collect(Collectors.toList());
+        // bu bir turetilen method. turetilen methodlara goz gezdir. derya deniz methodlar var.
     }
 
     // Not :  Delete() *************************************************************************

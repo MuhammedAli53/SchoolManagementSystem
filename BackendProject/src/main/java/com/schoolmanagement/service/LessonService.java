@@ -89,7 +89,7 @@ public class LessonService {
         return lessonRepository.findAll(pageable).map(this::createLessonResponse); // findAll pojo doner!!!
     }
 
-    public Set<Lesson> getLessonByLessonIdList(Set<Long> lessons) {
+    public Set<Lesson> getLessonByLessonIdList(Set<Long> lessons) { // burda lesson dondurduk.
         return lessonRepository.getLessonByLessonIdList(lessons);
     }
 }

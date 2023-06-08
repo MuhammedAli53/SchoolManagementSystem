@@ -22,8 +22,6 @@ import java.util.Set;
 
 public class LessonProgramRequest {
 
-
-
     @NotNull(message="Please enter day")
     private Day day;
 
@@ -37,9 +35,9 @@ public class LessonProgramRequest {
 
     @NotNull(message="Please select lesson")
     @Size(min=1, message ="Lesson must not be empty")
-    private Set<Long> lessonIdList;
+    private Set<Long> lessonIdList; // derslerin idlerini alicaz.
 
     @NotNull(message="Please enter education term")
-    private Long educationTermId;
+    private Long educationTermId; //educationtermin idsini aliyoruz.
 
 }
