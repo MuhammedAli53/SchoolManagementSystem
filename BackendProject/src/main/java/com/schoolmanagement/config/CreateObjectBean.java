@@ -2,6 +2,7 @@ package com.schoolmanagement.config;
 
 import com.schoolmanagement.payload.dto.DeanDto;
 import com.schoolmanagement.payload.dto.LessonProgramDto;
+import com.schoolmanagement.payload.dto.TeacherRequestDto;
 import com.schoolmanagement.payload.dto.ViceDeanDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class CreateObjectBean {
 
     @Bean
-    public DeanDto deanDto(){
+    public DeanDto deanDTO() {
         return new DeanDto();
     }
 
@@ -20,7 +21,12 @@ public class CreateObjectBean {
     }
 
     @Bean
-    public LessonProgramDto lessonProgramDto(){
+    public LessonProgramDto lessonProgramRequestDto() {
         return new LessonProgramDto();
+    }
+
+    @Bean
+    public TeacherRequestDto teacherRequestDto() {
+        return new TeacherRequestDto();
     }
 }

@@ -7,6 +7,7 @@ import com.schoolmanagement.payload.request.AdminRequest;
 import com.schoolmanagement.payload.response.AdminResponse;
 import com.schoolmanagement.payload.response.ResponseMessage;
 import com.schoolmanagement.repository.*;
+import com.schoolmanagement.utils.FieldControl;
 import com.schoolmanagement.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,8 @@ public class AdminService {
     private final DeanRepository deanRepository;
     private final TeacherRepository teacherRepository;
     private final GuestUserRepository guestUserRepository;
+    private final FieldControl fieldControl;
+
 
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
@@ -36,7 +39,8 @@ public class AdminService {
     public ResponseMessage save(AdminRequest request) {
 
         // !!! Girilen username - ssn- phoneNumber unique mi kontrolu
-        checkDuplicate(request.getUsername(), request.getSsn(), request.getPhoneNumber());
+        fieldControl.checkDuplicate(request.getUsername(), request.getSsn(), request.getPhoneNumber());
+        //checkDuplicate(request.getUsername(), request.getSsn(), request.getPhoneNumber());
         // !!! Admin nesnesi builder ile olusturalim
         Admin admin = createAdminForSave(request);
         admin.setBuilt_in(false);
@@ -84,13 +88,14 @@ public class AdminService {
 
     }
 
-    /*
-     ODEV -- yukardaki duplicate methodunu 4 parametreli hale getirmek istersem ???
-     /*    public void checkDuplicate2(String... values) {
+        //ODEV -- yukardaki duplicate methodunu 4 parametreli hale getirmek istersem ???
+     /*    public void checkDuplicate(String... values) {
         String username = values[0];
         String ssn = values[1];
         String phone = values[2];
-        String email = values[3];
+
+        if(values.length==4) {
+        String email = values[3]; }
 
         if (adminRepository.existsByUsername(username) || deanRepository.existsByUsername(username) ||
                 studentRepository.existsByUsername(username) || teacherRepository.existsByUsername(username) ||
@@ -106,9 +111,8 @@ public class AdminService {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, phone));
         } else if (studentRepository.existsByEmail(email) || teacherRepository.existsByEmail(email)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_EMAIL, email));
-        }
-    }*/ // checkDuplicate VarArgs cozumu ( Odev olarak Ver )
-
+        }*/
+        // checkDuplicate VarArgs cozumu ( Odev olarak Ver )
 
     protected Admin createAdminForSave(AdminRequest request){
 
@@ -146,19 +150,19 @@ public class AdminService {
     // Not: delete() *******************************************************
     public String deleteAdmin(Long id) {
 
-         Optional<Admin> admin = adminRepository.findById(id);
+        Optional<Admin> admin = adminRepository.findById(id);
 
-         if(admin.isPresent() && admin.get().isBuilt_in()) {
-             throw new ConflictException(Messages.NOT_PERMITTED_METHOD_MESSAGE);
-         }
+        if(admin.isPresent() && admin.get().isBuilt_in()) {
+            throw new ConflictException(Messages.NOT_PERMITTED_METHOD_MESSAGE);
+        }
 
-         if(admin.isPresent()) {
-             adminRepository.deleteById(id);
+        if(admin.isPresent()) {
+            adminRepository.deleteById(id);
 
-             return "Admin is deleted Successfully";
-         }
+            return "Admin is deleted Successfully";
+        }
 
-         return Messages.NOT_FOUND_USER_MESSAGE;
+        return Messages.NOT_FOUND_USER_MESSAGE;
     }
 
     // !!! Runner tarafi icin yazildi

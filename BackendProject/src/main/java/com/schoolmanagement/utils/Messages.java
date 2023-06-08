@@ -34,6 +34,8 @@ public class Messages {// applicationumuzdaki tum messagelerimizi burda olusturu
     public static final String TIME_NOT_VALID_MESSAGE = "Error: incorrect time" ;
 
 
+    //tacher
+    public static final String LESSON_PROGRAM_NOT_FOUND_MESSAGE = "Error: Lesson Program not found" ;
 
 
 

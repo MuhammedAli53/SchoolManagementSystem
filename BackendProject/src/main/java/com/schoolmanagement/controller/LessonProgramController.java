@@ -5,6 +5,7 @@ import com.schoolmanagement.payload.response.LessonProgramResponse;
 import com.schoolmanagement.payload.response.ResponseMessage;
 import com.schoolmanagement.service.LessonProgramService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,12 +59,15 @@ public class LessonProgramController {
     }
 
 
+
     // Not :  Delete() *************************************************************************
     @DeleteMapping("/delete/{id}") //http://localhost:8080/lessonPrograms/delete/1
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     public ResponseMessage delete (@PathVariable Long id) {
         return lessonProgramService.deleteLessonProgram(id);
     }
+
+
 
     // Not :  getLessonProgramByTeacher() ******************************************************
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN','MANAGER','ASSISTANTMANAGER')")
@@ -74,8 +78,28 @@ public class LessonProgramController {
         //onun attbibute methodu var. onun icerisine almak istedigimiz degisken adini yazariz. olay biter.
         //HttpServletRequest bize gelen requesti gorme sansi verir. Bu requeste bak, username fieldi ile girilen datayi cek ve String bir deger icine ata dedik.
         String username = (String) httpServletRequest.getAttribute("username"); // cektigin dataya cast islemi istiyor. Emin misin diye.
-        //currently login olan kullaniciya ulas da diyebiliriz. getPrincipal().
+        //currently login olan kullaniciya ulas da diyebiliriz. getPrincipal(). Ancak admin giris yapti diyelim, ahmet adli kullanici isteniyor bizden, bu bilgiyi
+        //alamazdık. Bu nedenle getPrincipal methodu calismaz.
         return lessonProgramService.getLessonProgramByTeacher(username);
-
     }
+    //************************** getAllLessonProgramByStudent() ****************************
+    @GetMapping("/getAllLessonProgramByStudent")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER', 'STUDENT', 'TEACHER')")
+    public Set<LessonProgramResponse> getAllLessonProgramByStudent(HttpServletRequest httpServletRequest){
+        String username = (String) httpServletRequest.getAttribute("username");
+        return lessonProgramService.getLessonProgramByStudent(username);
+    }
+
+    //**************************** getAllWithPage **************************************
+    @GetMapping("/search")// http://localhost:8080/lessonPrograms/search
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'ASSISTANTMANAGER', 'TEACHER', 'STUDENT')")
+    public Page<LessonProgramResponse> search(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") String sort,
+            @RequestParam(value = "type") String type
+    ){
+        return lessonProgramService.search(page,size,sort,type);
+    }
+
 }
