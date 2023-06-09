@@ -83,9 +83,11 @@ public class LessonProgramController {
         return lessonProgramService.getLessonProgramByTeacher(username);
     }
     //************************** getAllLessonProgramByStudent() ****************************
+    // spesifik bir studentin id ile ders programini getirmek.
     @GetMapping("/getAllLessonProgramByStudent")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER', 'STUDENT', 'TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER', 'TEACHER')")
     public Set<LessonProgramResponse> getAllLessonProgramByStudent(HttpServletRequest httpServletRequest){
+
         String username = (String) httpServletRequest.getAttribute("username");
         return lessonProgramService.getLessonProgramByStudent(username);
     }

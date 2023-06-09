@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class FieldControl {
+     // bu injection lar normalde method icindeydi. Biz method disina koyduk ve Classi component ile setledik. Boylelikle bu methoda ihtiyacimiz oldugunda
+    // asagidaki repolari injekte etmeden isimizi halletmis oluyoruz.
     private final AdminRepository adminRepository;
     private final StudentRepository studentRepository;
     private final ViceDeanRepository viceDeanRepository;
@@ -37,7 +39,7 @@ public class FieldControl {
                 studentRepository.existsByPhoneNumber(phone) || teacherRepository.existsByPhoneNumber(phone) ||
                 viceDeanRepository.existsByPhoneNumber(phone) || guestUserRepository.existsByPhoneNumber(phone)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, phone));
-        }else if (studentRepository.existsByEmail(email) || teacherRepository.existsByEmail(email)) {
+        }else if (studentRepository.existsByEmail(email) ||teacherRepository.existsByEmail(email)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, email));
         }
     }

@@ -9,6 +9,7 @@ import com.schoolmanagement.payload.response.DeanResponse;
 import com.schoolmanagement.payload.response.ResponseMessage;
 import com.schoolmanagement.repository.DeanRepository;
 import com.schoolmanagement.utils.CheckParameterUpdateMethod;
+import com.schoolmanagement.utils.FieldControl;
 import com.schoolmanagement.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,8 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,10 +33,10 @@ public class DeanService {
     private final DeanDto deanDto;
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
-
+    private final FieldControl fieldControl;
 
     public ResponseMessage<DeanResponse> save(DeanRequest deanRequest) {
-        adminService.checkDuplicate(deanRequest.getUsername(), // bu uc data unique olmali.
+        fieldControl.checkDuplicate(deanRequest.getUsername(), // bu uc data unique olmali.
                 deanRequest.getSsn(),
                 deanRequest.getPhoneNumber());
 
@@ -78,7 +77,7 @@ public class DeanService {
             //yapmadan once kontrol etmemiz lazim.
         } else if (!CheckParameterUpdateMethod.checkParameter(dean.get(), newDean)) { // burda ilk dean parametresini verince kizardi. get() ile cagirmamiz lazim. Optrional yapidaki
             //deanin icindeki deani getir demis oluyoruz.
-            adminService.checkDuplicate(newDean.getUsername(), newDean.getSsn(), newDean.getPhoneNumber());
+            fieldControl.checkDuplicate(newDean.getUsername(), newDean.getSsn(), newDean.getPhoneNumber());
         }
         //guncellenen yeni bilgilerle dean objesini kaydedelim.
         Dean updatedDean = createUpdatedDean(newDean, deanId); // deanrequest dean olarak dbye kaydedildi.

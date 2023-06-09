@@ -21,7 +21,8 @@ public class TeacherRequest extends BaseUserRequest {
     private Set<Long> lessonIdList;
 
     @NotNull(message = "Please select isAdvisor Teacher")
-    private Boolean isAdvisorTeacher;
+    private boolean isAdvisorTeacher; // is keywordle basladi. Boolean lar is keywordle baslar genelde. Lombok bunun get methodunu calistirmiyor
+    //bu nedenle primitive type a donduk.
 
 
     @NotNull(message = "Please enter your email")

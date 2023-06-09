@@ -31,7 +31,6 @@ public class AdminService {
     private final GuestUserRepository guestUserRepository;
     private final FieldControl fieldControl;
 
-
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
 
@@ -62,7 +61,7 @@ public class AdminService {
 
     }
 
-    public void checkDuplicate(String username, String ssn, String phone){
+  /*  public void checkDuplicate(String username, String ssn, String phone){
         if(adminRepository.existsByUsername(username) ||
                 deanRepository.existsByUsername(username) ||
                 studentRepository.existsByUsername(username) ||
@@ -86,7 +85,7 @@ public class AdminService {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, phone));
         }
 
-    }
+    }*/
 
         //ODEV -- yukardaki duplicate methodunu 4 parametreli hale getirmek istersem ???
      /*    public void checkDuplicate(String... values) {
