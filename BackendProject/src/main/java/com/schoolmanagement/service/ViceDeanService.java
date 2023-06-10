@@ -9,6 +9,7 @@ import com.schoolmanagement.payload.response.ResponseMessage;
 import com.schoolmanagement.payload.response.ViceDeanResponse;
 import com.schoolmanagement.repository.ViceDeanRepository;
 import com.schoolmanagement.utils.CheckParameterUpdateMethod;
+import com.schoolmanagement.utils.FieldControl;
 import com.schoolmanagement.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,14 +30,14 @@ import java.util.stream.Collectors;
 public class ViceDeanService {
 
     private final ViceDeanRepository viceDeanRepository;
-    private final AdminService adminService;
     private final ViceDeanDto viceDeanDto;
     private final PasswordEncoder passwordEncoder;
     private final UserRoleService userRoleService;
+    private final FieldControl fieldControl;
 
     public ResponseMessage<ViceDeanResponse> save(ViceDeanRequest viceDeanRequest) {
 
-        adminService.checkDuplicate(viceDeanRequest.getUsername(), viceDeanRequest.getSsn(), viceDeanRequest.getPhoneNumber());
+        fieldControl.checkDuplicate(viceDeanRequest.getUsername(), viceDeanRequest.getSsn(), viceDeanRequest.getPhoneNumber());
         ViceDean viceDean = createPojoFromDTO(viceDeanRequest);
         viceDean.setUserRole(userRoleService.getUserRole(RoleType.ASSISTANTMANAGER));
         viceDean.setPassword(passwordEncoder.encode(viceDeanRequest.getPassword()));
@@ -68,7 +69,7 @@ public class ViceDeanService {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER2_MESSAGE, managerId));
             // dean classinda da bu yapiyi kullandik. Surekli tekrar seyler oldugu icin bu methodu utilsde yazabilirsin generic yapida.
         } else if(CheckParameterUpdateMethod.checkParameter(viceDean.get(),newViceDean)){
-            adminService.checkDuplicate(newViceDean.getUsername(),newViceDean.getSsn(), newViceDean.getPhoneNumber());
+            fieldControl.checkDuplicate(newViceDean.getUsername(),newViceDean.getSsn(), newViceDean.getPhoneNumber());
         }
         ViceDean updatedViceDean = createUpdateViceDean(newViceDean,managerId);
         updatedViceDean.setPassword(passwordEncoder.encode(newViceDean.getPassword()));

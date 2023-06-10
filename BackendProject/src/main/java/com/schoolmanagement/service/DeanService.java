@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DeanService {
     private final DeanRepository deanRepository;
-    private final AdminService adminService;
     private final DeanDto deanDto;
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;

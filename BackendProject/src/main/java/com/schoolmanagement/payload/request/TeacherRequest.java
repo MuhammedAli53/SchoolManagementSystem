@@ -18,7 +18,7 @@ import java.util.Set;
 public class TeacherRequest extends BaseUserRequest {
 
     @NotNull(message = "Please select Lesson")
-    private Set<Long> lessonIdList;
+    private Set<Long> lessonsIdList;
 
     @NotNull(message = "Please select isAdvisor Teacher")
     private boolean isAdvisorTeacher; // is keywordle basladi. Boolean lar is keywordle baslar genelde. Lombok bunun get methodunu calistirmiyor

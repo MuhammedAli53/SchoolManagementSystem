@@ -21,12 +21,15 @@ public class TeacherController {
 
     private final TeacherService teacherService;
 
+
     //*********************** save() **************************
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'ASSISTANTMANAGER')")
     @PostMapping("/save") // http://localhost:8080/teachers/save
     public ResponseMessage<TeacherResponse> save(@Valid @RequestBody TeacherRequest teacher){
         return teacherService.save(teacher);
     }
+
+
 
     //********************** getAll ****************************
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'ASSISTANTMANAGER')")
@@ -35,12 +38,17 @@ public class TeacherController {
         return teacherService.getAllTeacher();
     }
 
+
+
+
     //********************** updateTeacherById ************************
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'ASSISTANTMANAGER')")
     @PutMapping("/update/{userId}")
     public ResponseMessage<TeacherResponse> updateTeacher(@RequestBody @Valid TeacherRequest teacherRequest, @PathVariable Long userId){
         return teacherService.updateTeacher(teacherRequest,userId);
     }
+
+
 
     //************************* getTeacherByName ************************
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'ASSISTANTMANAGER')")
@@ -51,12 +59,15 @@ public class TeacherController {
 
     }
 
+
     //*************************** deleteTeacher *****************************
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'ASSISTANTMANAGER')")
     @DeleteMapping("/delete/{id}")
     public ResponseMessage<?> deleteTeacher(@PathVariable Long id){
         return teacherService.deleteTeacher(id);
     }
+
+
 
 
     //************************** getTeacherById ******************************
@@ -82,6 +93,8 @@ public class TeacherController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'ASSISTANTMANAGER')")
     @PostMapping("/chooseLesson")
     public ResponseMessage<TeacherResponse> chooseLesson(@RequestBody @Valid ChooseLessonTeacherRequest chooseLessonRequest){
+        //ogretmene ders eklicez. Lesson ve teacherid ler lazim bize. Cunkku bu methodu teacher yapamiyor. Admin, mudur yada mudur yardimcisi
+        //yapyor, bu nedenle teacher id ve lessonid lazim. Bu nedenle bu yapiya uygun bir request olusturmamiz lazim.
         return teacherService.chooseLesson(chooseLessonRequest);
     }
 }

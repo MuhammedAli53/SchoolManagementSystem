@@ -11,6 +11,7 @@ import com.schoolmanagement.payload.request.TeacherRequest;
 import com.schoolmanagement.payload.response.ResponseMessage;
 import com.schoolmanagement.payload.response.TeacherResponse;
 import com.schoolmanagement.repository.TeacherRepository;
+import com.schoolmanagement.utils.CheckSameLessonProgram;
 import com.schoolmanagement.utils.FieldControl;
 import com.schoolmanagement.utils.Messages;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +39,12 @@ public class TeacherService {
     private final PasswordEncoder passwordEncoder;
     private final TeacherRequestDto teacherRequestDto;
     private final UserRoleService userRoleService;
+    private final AdvisorTeacherService advisorTeacherService;
 
     // Not: Save() **********************************************************
     public ResponseMessage<TeacherResponse> save(TeacherRequest teacherRequest) {
         //ogretmenin derslerini almamiz lazim lessonProgramServiceden.
-        Set<LessonProgram> lessons = lessonProgramService.getLessonProgramById(teacherRequest.getLessonIdList());
+        Set<LessonProgram> lessons = lessonProgramService.getLessonProgramById(teacherRequest.getLessonsIdList());
 
         if(lessons.size()==0){
             throw  new BadRequestException(Messages.LESSON_PROGRAM_NOT_FOUND_MESSAGE);
@@ -65,6 +67,10 @@ public class TeacherService {
             // !!! Db ye kayit islemi
             Teacher savedTeacher = teacherRepository.save(teacher);
             //TODO AdvisorTeacher yazilinca ekleme yapilacak
+            if (teacherRequest.isAdvisorTeacher()){
+                // degisiklşigi advisorteacher tablosunda yapicaz. eger isadvisor fieldi true ise advisorservice gir kayit yap. parametre olarak teacheri gonder.
+                advisorTeacherService.saveAdvisorTeacher(savedTeacher);
+            }
 
             return ResponseMessage.<TeacherResponse>builder()
                     .message("Teacher saved successfully")
@@ -98,19 +104,24 @@ public class TeacherService {
     }
 
     public ResponseMessage<TeacherResponse> updateTeacher(TeacherRequest newTeacher, Long userId) {
-        Optional<Teacher> teacher = teacherRepository.findById(userId);
-        Set<LessonProgram> lessons = lessonProgramService.getLessonProgramById(newTeacher.getLessonIdList());
+        Optional<Teacher> teacher = teacherRepository.findById(userId); // idli data var mi
+        //dto uzerinden eklenecek lessonlar.
+        Set<LessonProgram> lessons = lessonProgramService.getLessonProgramById(newTeacher.getLessonsIdList());
         if (!teacher.isPresent()){
             throw new ResourceNotFoundException(Messages.NOT_FOUND_USER_MESSAGE);
         } else if (lessons.size()==0) {
             throw new BadRequestException(Messages.LESSON_PROGRAM_NOT_FOUND_MESSAGE);
         } else if (!checkParameterForUpdateMethod(teacher.get(),newTeacher)) {
-            fieldControl.checkDuplicate(newTeacher.getUsername(), newTeacher.getSsn(), newTeacher.getPhoneNumber(), newTeacher.getEmail());
+            fieldControl.checkDuplicate(newTeacher.getUsername(),
+                    newTeacher.getSsn(),
+                    newTeacher.getPhoneNumber(),
+                    newTeacher.getEmail());
         }
         Teacher updatedTeacher = createUpdatedTeacher(newTeacher,userId);
         updatedTeacher.setPassword(passwordEncoder.encode(newTeacher.getPassword()));
         updatedTeacher.setLessonsProgramList(lessons);
         Teacher savedTeacher = teacherRepository.save(updatedTeacher);
+        advisorTeacherService.updateAdvisorTeacher(newTeacher.isAdvisorTeacher(),savedTeacher);
 
         return ResponseMessage.<TeacherResponse>builder().message("Teacher updated successfully")
                 .object(createTeacherResponse(savedTeacher)).httpStatus(HttpStatus.OK).build();
@@ -140,7 +151,8 @@ public class TeacherService {
 
     public List<TeacherResponse> getTeacherByName(String teacherName) {
 
-        return teacherRepository.getTeacherByNameContaining(teacherName).stream().map(this::createTeacherResponse).collect(Collectors.toList());
+        return teacherRepository.getTeacherByNameContaining(teacherName)
+                .stream().map(this::createTeacherResponse).collect(Collectors.toList());
         // turetilebilen bir methoddur.
         // containing bir keyword.
     }
@@ -183,7 +195,11 @@ public class TeacherService {
         }
         // !!! Teacher in mevcut ders programi getiriliyor
         Set<LessonProgram> existLessonProgram =teacher.getLessonsProgramList();
-        // TODO eklenecek olan LessonProgram mevcuttaki LessonProgramda var mi kontrolu
+
+        // eklenecek olan LessonProgram mevcuttaki LessonProgramda var mi kontrolu. cakisma olmamasi lazim.
+        // start ve stop saatleri arasinda cakisma olmayacak. Mesela matematik dersi ekli bir ogretmende. Pç.tesi sali gunlerine ekli.
+        //yeni bir ders daha eklemek istedik, sali gunune mesela. eski var olan dersimizle yeni ders saatlerimizin cakismamasi lazim.
+        CheckSameLessonProgram.checkDuplicateLessonPrograms(existLessonProgram,lessonPrograms);
         existLessonProgram.addAll(lessonPrograms);
         teacher.setLessonsProgramList(existLessonProgram);
         Teacher savedTeacher = teacherRepository.save(teacher);

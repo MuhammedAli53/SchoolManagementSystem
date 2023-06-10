@@ -37,7 +37,8 @@ public class Messages {// applicationumuzdaki tum messagelerimizi burda olusturu
     //tacher
     public static final String LESSON_PROGRAM_NOT_FOUND_MESSAGE = "Error: Lesson Program not found" ;
 
-
+    //utils
+    public static final String LESSON_PROGRAM_EXIST_MESSAGE = "Error: Course schedule can not be selected fir the same hour and date" ;
 
 
 

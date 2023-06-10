@@ -3,6 +3,7 @@ package com.schoolmanagement.payload.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.schoolmanagement.entity.concretes.EducationTerm;
 import com.schoolmanagement.entity.concretes.Lesson;
+import com.schoolmanagement.entity.concretes.Teacher;
 import com.schoolmanagement.entity.enums.Day;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,5 +33,7 @@ public class LessonProgramResponse {
 
     private EducationTerm educationTerm;
 
+    private Set<TeacherResponse> teachers; // neden teachers? mantigi nedir?
+    //okulda 2 matematik vardir, biri a sinifina digeri b sinifina giriyordur.
     //TODO : Student ve Teacher katmani yazilinca buraya ekle.
 }
