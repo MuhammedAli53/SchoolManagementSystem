@@ -94,7 +94,7 @@ public class TeacherController {
     @PostMapping("/chooseLesson")
     public ResponseMessage<TeacherResponse> chooseLesson(@RequestBody @Valid ChooseLessonTeacherRequest chooseLessonRequest){
         //ogretmene ders eklicez. Lesson ve teacherid ler lazim bize. Cunkku bu methodu teacher yapamiyor. Admin, mudur yada mudur yardimcisi
-        //yapyor, bu nedenle teacher id ve lessonid lazim. Bu nedenle bu yapiya uygun bir request olusturmamiz lazim.
+        //yapiyor, bu nedenle teacher id ve lessonid lazim. Bu nedenle bu yapiya uygun bir request olusturmamiz lazim.
         return teacherService.chooseLesson(chooseLessonRequest);
     }
 }

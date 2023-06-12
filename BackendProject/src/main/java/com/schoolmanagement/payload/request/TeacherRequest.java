@@ -22,7 +22,7 @@ public class TeacherRequest extends BaseUserRequest {
 
     @NotNull(message = "Please select isAdvisor Teacher")
     private boolean isAdvisorTeacher; // is keywordle basladi. Boolean lar is keywordle baslar genelde. Lombok bunun get methodunu calistirmiyor
-    //bu nedenle primitive type a donduk.
+    //bu nedenle primitive type a donduk. Lombok Boolean turundeki classlarda is ...  ile baslayan kelimelerin getter'inde sorun yasatiyor.
 
 
     @NotNull(message = "Please enter your email")

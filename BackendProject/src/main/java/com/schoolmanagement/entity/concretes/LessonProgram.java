@@ -34,7 +34,8 @@ public class LessonProgram implements Serializable {
     private LocalTime stopTime;
 
     @ManyToMany
-    private Set<Lesson> lesson;
+    private Set<Lesson> lesson; // burda lesson setledik, lessonda lessonprogram setlemedik.
+    //burda hibernate otomatik 3. tabloy atar.
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private EducationTerm educationTerm;

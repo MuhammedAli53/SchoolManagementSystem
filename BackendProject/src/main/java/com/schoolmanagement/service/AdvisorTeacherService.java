@@ -38,7 +38,9 @@ public class AdvisorTeacherService {
     }
 
     public List<AdvisorTeacherResponse> getAllAdvisorTeacher() {
-        return advisorTeacherRepository.findAll().stream().map(this::createResponseObject).collect(Collectors.toList());
+        return advisorTeacherRepository.findAll().stream()
+                .map(this::createResponseObject) // stream akisindan gelen her pojoya map yap.
+                .collect(Collectors.toList());
     }
     private AdvisorTeacherResponse createResponseObject(AdvisorTeacher advisorTeacher){
         return AdvisorTeacherResponse.builder().advisorTeacherId(advisorTeacher.getId())
@@ -59,7 +61,7 @@ public class AdvisorTeacherService {
     // ************************ Teacher Service icin gerekli methodlar *******************************
 
     //******************** save ***************************
-    public void saveAdvisorTeacher(Teacher teacher) {
+    public void saveAdvisorTeacher(Teacher teacher) { // kayitli teacher uzerinden islem yapiyoruz.
         AdvisorTeacher advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher)
                 .userRole(userRoleService.getUserRole(RoleType.ADVISORTEACHER))
                 .build();
@@ -69,9 +71,10 @@ public class AdvisorTeacherService {
     //******************** update ***************************
     public void updateAdvisorTeacher(boolean status, Teacher teacher) {
         Optional<AdvisorTeacher> advisorTeacher = advisorTeacherRepository.getAdvisorTeacherByTeacher_Id(teacher.getId());
+        //mumkun oldugunca optional datalarla calisma.
         AdvisorTeacher.AdvisorTeacherBuilder advisorTeacherBuilder =
                 AdvisorTeacher.builder().teacher(teacher).userRole(userRoleService.getUserRole(RoleType.ADVISORTEACHER));
-
+        //build ile objeyi olusturmadik. eksik datalarimiz var, o datalari setleyip sonra kaydedicez.
         if (advisorTeacher.isPresent()){
             if (status){
                 advisorTeacherBuilder.id(advisorTeacher.get().getId());
@@ -82,5 +85,9 @@ public class AdvisorTeacherService {
         }else {
             advisorTeacherRepository.save(advisorTeacherBuilder.build());
         }
+    }
+    // StudentService icin gerekli business logic.
+    public Optional<AdvisorTeacher> getAdvisorTeacherById(Long id) { // su idli advisor teacheri gonder. Optionalş dondurucek.
+        return advisorTeacherRepository.findById(id);
     }
 }

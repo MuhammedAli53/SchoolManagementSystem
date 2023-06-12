@@ -197,7 +197,7 @@ public class TeacherService {
         Set<LessonProgram> existLessonProgram =teacher.getLessonsProgramList();
 
         // eklenecek olan LessonProgram mevcuttaki LessonProgramda var mi kontrolu. cakisma olmamasi lazim.
-        // start ve stop saatleri arasinda cakisma olmayacak. Mesela matematik dersi ekli bir ogretmende. Pç.tesi sali gunlerine ekli.
+        // start ve stop saatleri arasinda cakisma olmayacak. Mesela matematik dersi ekli bir ogretmende. P.tesi sali gunlerine ekli.
         //yeni bir ders daha eklemek istedik, sali gunune mesela. eski var olan dersimizle yeni ders saatlerimizin cakismamasi lazim.
         CheckSameLessonProgram.checkDuplicateLessonPrograms(existLessonProgram,lessonPrograms);
         existLessonProgram.addAll(lessonPrograms);
