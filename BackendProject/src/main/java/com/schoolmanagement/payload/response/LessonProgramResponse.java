@@ -35,5 +35,7 @@ public class LessonProgramResponse {
 
     private Set<TeacherResponse> teachers; // neden teachers? mantigi nedir?
     //okulda 2 matematik vardir, biri a sinifina digeri b sinifina giriyordur.
-    //TODO : Student ve Teacher katmani yazilinca buraya ekle.
+
+    private Set<StudentResponse> students;
+
 }

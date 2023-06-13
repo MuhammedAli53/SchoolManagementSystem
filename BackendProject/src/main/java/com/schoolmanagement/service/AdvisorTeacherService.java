@@ -70,11 +70,12 @@ public class AdvisorTeacherService {
     }
     //******************** update ***************************
     public void updateAdvisorTeacher(boolean status, Teacher teacher) {
+        //advisor teachere ulasabilme isi Teacher ustunde. Bu nedenle teacher aliyoruz.
         Optional<AdvisorTeacher> advisorTeacher = advisorTeacherRepository.getAdvisorTeacherByTeacher_Id(teacher.getId());
         //mumkun oldugunca optional datalarla calisma.
         AdvisorTeacher.AdvisorTeacherBuilder advisorTeacherBuilder =
                 AdvisorTeacher.builder().teacher(teacher).userRole(userRoleService.getUserRole(RoleType.ADVISORTEACHER));
-        //build ile objeyi olusturmadik. eksik datalarimiz var, o datalari setleyip sonra kaydedicez.
+        //build ile objeyi olusturmadik. eksik datalarimiz var, o datalari setleyip sonra kaydedicez. if yapisinin icinde yapilacak bu islem.
         if (advisorTeacher.isPresent()){
             if (status){
                 advisorTeacherBuilder.id(advisorTeacher.get().getId());
@@ -83,7 +84,7 @@ public class AdvisorTeacherService {
                 advisorTeacherRepository.deleteById(advisorTeacher.get().getId());
             }
         }else {
-            advisorTeacherRepository.save(advisorTeacherBuilder.build());
+            advisorTeacherRepository.save(advisorTeacherBuilder.build()); // burda sikinti var.
         }
     }
     // StudentService icin gerekli business logic.

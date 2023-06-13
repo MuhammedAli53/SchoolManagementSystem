@@ -156,6 +156,7 @@ public class LessonProgramService {
                 .lessonProgramId(lessonProgram.getId())
                 .lessonName(lessonProgram.getLesson())
                 //TODO Student yazilinca buraya ekleme yapilacak
+             //   .students(lessonProgram.getStudents().stream().map().collect(Collectors.toSet()))
                 .build();
     }
 

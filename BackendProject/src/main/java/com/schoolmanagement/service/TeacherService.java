@@ -105,6 +105,7 @@ public class TeacherService {
 
     public ResponseMessage<TeacherResponse> updateTeacher(TeacherRequest newTeacher, Long userId) {
         Optional<Teacher> teacher = teacherRepository.findById(userId); // idli data var mi
+
         //dto uzerinden eklenecek lessonlar.
         Set<LessonProgram> lessons = lessonProgramService.getLessonProgramById(newTeacher.getLessonsIdList());
         if (!teacher.isPresent()){
@@ -118,6 +119,7 @@ public class TeacherService {
                     newTeacher.getEmail());
         }
         Teacher updatedTeacher = createUpdatedTeacher(newTeacher,userId);
+        //burda rolu setledik biz. createUpdateTeacher donusumunde setledik
         updatedTeacher.setPassword(passwordEncoder.encode(newTeacher.getPassword()));
         updatedTeacher.setLessonsProgramList(lessons);
         Teacher savedTeacher = teacherRepository.save(updatedTeacher);
@@ -137,7 +139,7 @@ public class TeacherService {
                 .birthPlace(teacher.getBirthPlace())
                 .phoneNumber(teacher.getPhoneNumber())
                 .isAdvisor(teacher.isAdvisorTeacher())
-                .userRole(userRoleService.getUserRole(RoleType.TEACHER))
+                .userRole(userRoleService.getUserRole(RoleType.TEACHER))  // role setlemesi dtoda.
                 .gender(teacher.getGender())
                 .email(teacher.getEmail())
                 .build();

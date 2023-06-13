@@ -17,7 +17,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL) // burasi bir response classi. burdaki her datayi setlemek istemeyebilirim. Bu nedenle setlemezsem null gonderme
+//diye belirtiyorum.
 public class StudentResponse extends BaseUserResponse {
 
     private Set<LessonProgram> lessonProgramSet;
