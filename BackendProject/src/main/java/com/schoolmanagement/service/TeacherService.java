@@ -213,4 +213,11 @@ public class TeacherService {
                 .build();
 
     }
+        //************************** StudentInfoService *************************
+    public Teacher getTeacherByUsername(String username) {
+        if (!teacherRepository.existsByUsername(username)){ // findby ile de alabilirdik.
+            throw new ResourceNotFoundException(Messages.NOT_FOUND_USER_MESSAGE);
+        }
+        return teacherRepository.getTeacherByUsername(username);
+    }
 }

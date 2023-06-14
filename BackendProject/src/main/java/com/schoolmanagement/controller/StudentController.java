@@ -69,6 +69,7 @@ public class StudentController {
     public Student getStudentById(@RequestParam(name = "id") Long id){ // donen deger pojo olmaz.
         return studentService.getStudentByIdForResponse(id);
         // burda sikinti var, pojo donduren method yazmamiz lazim. sonra yazicaz.
+
     }
     //getAllStudentWithPage
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'ASSISTANTMANAGER')")
@@ -83,16 +84,20 @@ public class StudentController {
     }
     //chooseLessonProgramById
     @PreAuthorize("hasAnyAuthority('STUDENT')") // ogrenci kendi dersini kendisi secebilir. Sadece kendisi yapabilir.
-    //bu bir create islemidir. Yeni bir ders seciliyor ve ogrenci datasi uzerinde degisiklikler yapicaz biz.
+    //bu bir create islemidir. Yeni bir ders seciliyor ve ogrenci datasi uzerinde degisiklikler yapicaz biz. Get de yazabilirdik aslinda. Ama post yazmamiz daha saglikli.
     @PostMapping("/chooseLesson")
     public ResponseMessage<StudentResponse> chooseLesson(HttpServletRequest request,
                                                          @RequestBody @Valid ChooseLessonProgramWithId chooseLessonProgramRequest){
+        //burdaki yontem degisebilir. PathVariable ile de alabilirdik. burda yapiyi zorladik biraz. gittik farkli class uzerinden requesti aldik.
         //bu kisim service de yazilirsa daha iyi olur.
+
+        // simdi ogrenci kendine ders eklicek ama hangi ogrenci. Bunu username uzerinden aliyoruz. Ayrica bir tane de ders idsi almamiz lazim
+        // ki dersi getirebilelim.. Bunu da yeni request classimiz araciligiyla aliyoruz.
         String username = (String) request.getAttribute("username"); // bu requesti username olarak aldik.
         return studentService.chooseLesson(username,chooseLessonProgramRequest);
     }
 
-    //getAllStudentByAdvisor : bir advisorun tum ogrencilerini getir.
+    //getAllStudentByAdvisor : bir advisorun tum ogrencilerini getir. advisor ekndi yapacak bu islemi.
     @PreAuthorize("hasAnyAuthority('TEACHER')")
     @GetMapping("/getAllByAdvisorId")
     public List<StudentResponse> getAllByAdvisorId(HttpServletRequest request){

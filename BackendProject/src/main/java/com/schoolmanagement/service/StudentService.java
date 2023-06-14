@@ -138,14 +138,15 @@ public class StudentService {
     }
 
     public ResponseMessage<?> deleteStudent(Long id) {
-        Student student =studentRepository.findById(id).orElseThrow(()-> {throw new ResourceNotFoundException(Messages.NOT_FOUND_USER_MESSAGE);});
+        Student student =studentRepository.findById(id).orElseThrow(()->  new ResourceNotFoundException(Messages.NOT_FOUND_USER_MESSAGE));
         studentRepository.deleteById(id);
         return ResponseMessage.builder().message("Student deleted successfully").httpStatus(HttpStatus.OK).build();
     }
 
     public List<StudentResponse> getStudentByName(String studentName) {
         return studentRepository.getStudentByNameContaining(studentName) // findByName olarak da turetebilirdik.
-                .stream().map(this::createStudentResponse).collect(Collectors.toList());
+                .stream().map(this::createStudentResponse) // stream yapida dtolar geliyor, bunlari liste cevirmemiz lazim.
+                .collect(Collectors.toList());
     }
 
     public Student getStudentByIdForResponse(Long id) { // eger service de bir method pojo donuyorsa bu neden olabilir?

@@ -13,7 +13,7 @@ public class Messages {// applicationumuzdaki tum messagelerimizi burda olusturu
     public static final String NOT_FOUND_USER2_MESSAGE = "Error: User not found with id %s" ;
 
     //education
-    public static final String EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE = "Error: The start date cannot be earlier than th last registration date " ;
+    public static final String EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE = "Error: The start date cannot be earlier than the last registration date " ;
 
     public static final String EDUCATION_END_DATE_IS_EARLIER_THAN_START_DATE = "Error: The end date cannot be earlier than the start date " ;
 
