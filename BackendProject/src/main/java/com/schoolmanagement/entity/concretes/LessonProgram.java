@@ -34,8 +34,13 @@ public class LessonProgram implements Serializable {
     private LocalTime stopTime;
 
     @ManyToMany
+    @JoinTable(
+            name = "lesson_program_lesson",
+            joinColumns =@JoinColumn(name = "lessonprogram_id"),
+            inverseJoinColumns = @JoinColumn(name = "lesson_id"))
     private Set<Lesson> lesson; // burda lesson setledik, lessonda lessonprogram setlemedik.
-    //burda hibernate otomatik 3. tabloy atar.
+    //burda hibernate otomatik 3. tabloy atar. bu tur seyleri default setlemeye birakma. bu nedenle biz lessonda
+    //setlicez.
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private EducationTerm educationTerm;

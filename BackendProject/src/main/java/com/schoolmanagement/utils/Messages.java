@@ -46,4 +46,6 @@ public class Messages {// applicationumuzdaki tum messagelerimizi burda olusturu
     //studentinfo
     public static final String STUDENT_INFO_NOT_FOUND = "Error: Student Info with id %d not found" ;
     //burda %d yaptik. digit demek. %s ise String
+
+    public static final String STUDENT_INFO_NOT_FOUND_BY_STUDENT_ID= "Error: Student Info with  student id %d not found" ;
 }
