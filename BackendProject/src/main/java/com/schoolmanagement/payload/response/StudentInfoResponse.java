@@ -24,7 +24,7 @@ public class StudentInfoResponse {
     private int creditScore;
     private boolean isCompulsory;
     private Term educationTerm;
-    private Double average; // dtoya sadece pojo fieldlerini koymayiz. Bazen de kendimiz field ekleriz.
+    private Double average; // dtoya sadece pojo fieldlerini koymayiz. Bazen de kendimiz field ekleriz. Donmek istedigimiz fieldleri de dtoya koyabiliriz.
     private Note note;
     private StudentResponse studentResponse;
 

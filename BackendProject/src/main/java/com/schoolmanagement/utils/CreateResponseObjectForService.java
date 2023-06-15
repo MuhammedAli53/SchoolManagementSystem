@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CreateResponseObjectForService {
 
-    public StudentResponse createStudentResponse(Student student) {
+    public StudentResponse createStudentResponse(Student student) { // burda bir mapper yaptik. Tum yapiyi mapper package alt
         return StudentResponse.builder().userId(student.getId()).username(student.getUsername())
                 .name(student.getName()).surname(student.getSurname()).birthDay(student.getBirthDay()).birthPlace(student.getBirthPlace())
                 .phoneNumber(student.getPhoneNumber()).gender(student.getGender()).email(student.getEmail()).motherName(student.getMotherName())

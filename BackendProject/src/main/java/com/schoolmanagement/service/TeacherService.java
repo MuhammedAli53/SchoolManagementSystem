@@ -214,7 +214,7 @@ public class TeacherService {
 
     }
         //************************** StudentInfoService *************************
-    public Teacher getTeacherByUsername(String username) {
+    public Teacher getTeacherByUsername(String username) { // donen deger pojo, demek ki farkli bir service de kullaniliyor.
         if (!teacherRepository.existsByUsername(username)){ // findby ile de alabilirdik.
             throw new ResourceNotFoundException(Messages.NOT_FOUND_USER_MESSAGE);
         }

@@ -150,7 +150,7 @@ public class StudentService {
     }
 
     public Student getStudentByIdForResponse(Long id) { // eger service de bir method pojo donuyorsa bu neden olabilir?
-        //baska service de kullanilacagi icin Pojo dondururuz. Service katmani icin gecerli bu dedigimiz.
+        //baska service de kullanilacagi icin Pojo dondururuz. Service katmani icin gecerli bu dedigimiz. bu methodu studentInfoService in save methodunda kullaniyoruz.
         return studentRepository.findById(id).orElseThrow(()->  new ResourceNotFoundException(Messages.NOT_FOUND_USER_MESSAGE));
          //
     }
