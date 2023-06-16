@@ -91,4 +91,9 @@ public class AdvisorTeacherService {
     public Optional<AdvisorTeacher> getAdvisorTeacherById(Long id) { // su idli advisor teacheri gonder. Optionalş dondurucek.
         return advisorTeacherRepository.findById(id);
     }
+
+    public Optional<AdvisorTeacher> getAdvisorTeacherByUsername(String username) {
+        return advisorTeacherRepository.findByTeacher_UsernameEquals(username); // findByUsername der gecerdik. farkli farkli turetilen methodlara bakalim diye
+        // bu sekilde yaptik.
+    }
 }

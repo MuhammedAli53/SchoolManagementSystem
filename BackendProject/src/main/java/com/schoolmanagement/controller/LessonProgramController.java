@@ -44,6 +44,7 @@ public class LessonProgramController {
         return lessonProgramService.getByLessonProgramId(id);
     }
     // Not :  getAllLessonProgramUnassigned() **************************************************
+    // atamasi yapilmamis ders programinin ogretmeni.
     @GetMapping("/getAllUnassigned") //http://localhost:8080/lessonPrograms/getAllUnassigned
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER','TEACHER','STUDENT')")
     public List<LessonProgramResponse> getAllUnassigned() {
@@ -51,7 +52,7 @@ public class LessonProgramController {
     }
 
     // Not :  getAllLessonProgramAssigned() **************************************************
-    //ogretmeni atanmamis ders programini getir.
+    //ogretmeni atanmis ders programini getir.
     @GetMapping("/getAllAssigned") //http://localhost:8080/lessonPrograms/getAllAssigned
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER','TEACHER','STUDENT')")
     public List<LessonProgramResponse> getAllAssigned() {

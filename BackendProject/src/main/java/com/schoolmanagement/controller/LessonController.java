@@ -59,10 +59,11 @@ public class LessonController {
     ) {
         return lessonService.search(page,size,sort,type);
     }
-    // Not :  getAllLessonByLessonIds() *****************************************************
+    // Not :  getAllLessonByLessonId() *****************************************************
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/getAllLessonByLessonId")  // http://localhost:8080/lessons/getAllLessonByLessonId
-    public Set<Lesson> getAllLessonByLessonId(@RequestParam(name = "lessonId") Set<Long> idList){ //birden fazla data gelecekse o dataya gore bir yapi olusturuyoruz.
+    public Set<Lesson> getAllLessonByLessonId(@RequestParam(name = "lessonId") Set<Long> idList){ // su su idli lessonlari bana getir. Unique olmali lessonlar ve cogul lesson cagirabilirim.
+        //birden fazla data gelecekse o dataya gore bir yapi olusturuyoruz.
         //name attribute i lessonId olsun. Burdan gelen data Set yapida icinde Long verileri olan bir idList icindeki yapiyla meplensin. Idlerle gelen datalar
         // lessonId catisi altinda gelecek ve hepsi set yapisi icine atilacak.
         return lessonService.getLessonByLessonIdList(idList);

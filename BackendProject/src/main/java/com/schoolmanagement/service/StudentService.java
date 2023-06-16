@@ -200,4 +200,8 @@ public class StudentService {
     public boolean existById(Long studentId) {
         return studentRepository.existsById(studentId);
     }
+
+    public List<Student> getStudentByIds(Long[] studentIds) {
+        return studentRepository.findByIdsEquals(studentIds);
+    }
 }

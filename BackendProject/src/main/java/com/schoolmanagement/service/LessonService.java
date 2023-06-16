@@ -86,10 +86,11 @@ public class LessonService {
             pageable = PageRequest.of(page,size,Sort.by(sort).descending());
         }
 
-        return lessonRepository.findAll(pageable).map(this::createLessonResponse); // findAll pojo doner!!!
+        return lessonRepository.findAll(pageable).map(this::createLessonResponse); // findAll pojo doner!!! response cevirmemiz lazim.
     }
 
     public Set<Lesson> getLessonByLessonIdList(Set<Long> lessons) { // burda lesson dondurduk.
+
         return lessonRepository.getLessonByLessonIdList(lessons);
     }
 

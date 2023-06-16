@@ -34,4 +34,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     //burda aslinda 2 tane inner join islemi yaptik. JPQL in guzelligi burda. 3 tabloya dallandik burda. Studentten advisor teachere, ordan teachere.
         // @Query(value= "SELECT s FROM Student s JOIN s.advisorTeacher at JOIN at.teacher t WHERE t.username=:username")
     List<Student> getStudentByAdvisorTeacher_Username(String username);
+
+    @Query(value = "Select s From Student s Where s.id IN :id")
+    List<Student> findByIdsEquals(Long[] id);
 }

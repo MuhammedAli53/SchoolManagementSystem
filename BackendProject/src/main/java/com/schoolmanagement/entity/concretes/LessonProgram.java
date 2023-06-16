@@ -55,7 +55,7 @@ public class LessonProgram implements Serializable {
 
     @PreRemove// silmeden once yapilmasi gerekenler var. lessonprogrami silmek icin ne yapmamiz lazim. bunu preRemove ile yapmasak da olur ama farkli bakis acilari getiriyoruz.
     private void removeLessonProgramFromStudent(){
-        //calculus programini silmek istiyroouz mesela. Matematigi bir alt dali. bunu direk cat diye silemem. Teacherler ve studentler var. bu yapiya baglilar. Once bu bagi ortadan
+        //calculus programini silmek istiyoruz mesela. Matematigi bir alt dali. bunu direk cat diye silemem. Teacherler ve studentler var. bu yapiya baglilar. Once bu bagi ortadan
         //kaldirmam gerekiyor. ders listesinden program siliyoruz yani.
         //burda ders programini siliyoruz. Bu ders programi ile iliskili ogrenci ve ogretmenlerin baglarini koparmamiz lazim.
         teachers.forEach((t)->{// bu methodun cagiirilmasina sebep olan bu instance hangisi ise (this ile belirttik, silmek istedigimiz instance)
