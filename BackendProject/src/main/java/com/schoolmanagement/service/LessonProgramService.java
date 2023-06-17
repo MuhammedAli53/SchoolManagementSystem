@@ -90,7 +90,7 @@ public class LessonProgramService {
                 .startTime(lessonProgram.getStartTime())
                 .stopTime(lessonProgram.getStopTime())
                 .lessonProgramId(lessonProgram.getId())
-                .lessonName(lessonProgram.getLesson())
+                //.lessonName(lessonProgram.getLesson()) burasi recursive yapi olusturuyor.
                 .teachers(lessonProgram.getTeachers().stream().map(this::createTeacherResponse).collect(Collectors.toSet()))
                 .students(lessonProgram.getStudents().stream().map(createResponseObjectForService::createStudentResponse).collect(Collectors.toSet()))
                 .build();

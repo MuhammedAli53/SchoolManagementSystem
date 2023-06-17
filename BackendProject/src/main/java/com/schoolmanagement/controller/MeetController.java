@@ -1,6 +1,7 @@
 package com.schoolmanagement.controller;
 
 import com.schoolmanagement.payload.request.MeetRequestWithoutId;
+import com.schoolmanagement.payload.request.UpdateMeetRequest;
 import com.schoolmanagement.payload.response.MeetResponse;
 import com.schoolmanagement.payload.response.ResponseMessage;
 import com.schoolmanagement.service.MeetService;
@@ -61,5 +62,42 @@ public class MeetController {
         Pageable pageable = PageRequest.of(page,size, Sort.by("date").descending());
         Page<MeetResponse> meet = meetService.getAllMeetByAdvisorTeacherAsPage(username,pageable);
         return ResponseEntity.ok(meet);
+    }
+    // ************* getAllMeetAdvisorTeacherAsList **************
+    @PreAuthorize("hasAnyAuthority('TEACHER')")
+    @GetMapping("/getAllMeetAdvisorTeacherAsList")
+    public ResponseEntity<List<MeetResponse>> getAllMeetAdvisorTeacherAsList(HttpServletRequest servletRequest){
+        String username = (String) servletRequest.getAttribute("username");
+        List<MeetResponse> meet = meetService.getAllMeetByAdvisorTeacherAsList(username);
+        return ResponseEntity.ok(meet);
+    }
+    // Not :  delete() ***********************************************************************
+    @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN' )")
+    @DeleteMapping("/delete/{meetId}")
+    public ResponseMessage<?> delete(@PathVariable Long meetId){
+        return meetService.delete(meetId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN' )")
+    @PutMapping("/update/{meetId}")
+    public ResponseMessage<MeetResponse> update(@RequestBody @Valid UpdateMeetRequest meetRequest,
+                                                @PathVariable Long meetId){
+        return meetService.update(meetRequest,meetId);
+    }
+    // Not :  getAllMeetByStudent() **********************************************************
+    @PreAuthorize("hasAnyAuthority('STUDENT')") // spesifik olarak bir ogrencinin username bilgisi ile tum meetlerini getiricem.
+    @GetMapping("/getAllMeetByStudent")
+    public List<MeetResponse> getAllMeetByStudent(HttpServletRequest httpServletRequest){
+        String username = (String) httpServletRequest.getAttribute("username");
+        return meetService.getAllMeetByStudentByUsername(username);
+    }
+    // Not :  getAllWithPage() **********************************************************
+    @PreAuthorize("hasAnyAuthority( 'ADMIN')")
+    @GetMapping("/search")
+    public Page<MeetResponse> search(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size
+    ){
+        return meetService.search(page,size);
     }
 }
