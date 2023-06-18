@@ -30,7 +30,7 @@ public class MeetController {
     @PostMapping("/save") // bu tur datayi pathVariable ile alamam. Endpointte teacherlerden birisi id numarasinmi degistirir endpointte hoop kendisine meet atar. Pegasus sitesinde
     // yaptigimiz gibi.
     public ResponseMessage<MeetResponse> save(HttpServletRequest httpServletRequest, @Valid @RequestBody MeetRequestWithoutId meetRequest){
-        String username = (String) httpServletRequest.getAttribute("username");
+        String username = (String) httpServletRequest.getAttribute("username"); // attribute lar requestin hedder kismina gelir. key value seklinde dondurulur.
         return meetService.save(username,meetRequest);
     }
 
@@ -63,10 +63,11 @@ public class MeetController {
         Page<MeetResponse> meet = meetService.getAllMeetByAdvisorTeacherAsPage(username,pageable);
         return ResponseEntity.ok(meet);
     }
-    // ************* getAllMeetAdvisorTeacherAsList **************
+    // ************* getAllMeetByAdvisorTeacherAsList **************
+    // spesifik bir ogretmenin tum meetlerini list olarak alicaz. bunun icin sadece username bilgisini alsak kafi.
     @PreAuthorize("hasAnyAuthority('TEACHER')")
-    @GetMapping("/getAllMeetAdvisorTeacherAsList")
-    public ResponseEntity<List<MeetResponse>> getAllMeetAdvisorTeacherAsList(HttpServletRequest servletRequest){
+    @GetMapping("/getAllMeetByAdvisorTeacherAsList")
+    public ResponseEntity<List<MeetResponse>> getAllMeetByAdvisorTeacherAsList(HttpServletRequest servletRequest){
         String username = (String) servletRequest.getAttribute("username");
         List<MeetResponse> meet = meetService.getAllMeetByAdvisorTeacherAsList(username);
         return ResponseEntity.ok(meet);
@@ -78,9 +79,11 @@ public class MeetController {
         return meetService.delete(meetId);
     }
 
+    // ************ update *****************
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN' )")
     @PutMapping("/update/{meetId}")
     public ResponseMessage<MeetResponse> update(@RequestBody @Valid UpdateMeetRequest meetRequest,
+                                                //spesifik senaryolar uzerinde spesifik dtolar olusturma konusunda usenme.
                                                 @PathVariable Long meetId){
         return meetService.update(meetRequest,meetId);
     }

@@ -44,21 +44,21 @@ public class MeetService {
 
     public ResponseMessage<MeetResponse> save(String username, MeetRequestWithoutId meetRequest) {
 
-        AdvisorTeacher advisorTeacher = advisorTeacherService.getAdvisorTeacherByUsername(username).orElseThrow(()->
-                new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE_WITH_USERNAME,username)));
+        AdvisorTeacher advisorTeacher = advisorTeacherService.getAdvisorTeacherByUsername(username).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE_WITH_USERNAME, username)));
 
-        if (TimeControl.check(meetRequest.getStartTime(),meetRequest.getStopTime()))
+        if (TimeControl.check(meetRequest.getStartTime(), meetRequest.getStopTime()))
             throw new BadRequestException(Messages.TIME_NOT_VALID_MESSAGE); // burda tek satr var, suslu parantez acmamiza gerek yok. ama 2 satir olsaydi ilk satiri alir 2. satiri
-            //disarda tutardi.
+        //disarda tutardi.
 
         //bir advisor yeni bir meeting duzenledi ve 20 ogrenciti icine koydu. bu saatler cakisiyor mu?
         for (Long studentId : meetRequest.getStudentIds()) {
             boolean check = studentRepository.existsById(studentId);
-            if (!check){
-                throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER2_MESSAGE,studentId));
+            if (!check) {
+                throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER2_MESSAGE, studentId));
             }
             //ogrencinin daha once programlanmıs meeti var mi?
-            checkMeetConflict(studentId, meetRequest.getDate(),meetRequest.getStartTime(), meetRequest.getStopTime());
+            checkMeetConflict(studentId, meetRequest.getDate(), meetRequest.getStartTime(), meetRequest.getStopTime());
         }
         //Meete katilacak olan Student ler getiriliyor.
         List<Student> students = studentService.getStudentByIds(meetRequest.getStudentIds());
@@ -81,28 +81,30 @@ public class MeetService {
                 .build();
 
     }
-    private void checkMeetConflict(Long studentId, LocalDate date, LocalTime startTime, LocalTime stopTime){
+
+    private void checkMeetConflict(Long studentId, LocalDate date, LocalTime startTime, LocalTime stopTime) {
 
         List<Meet> meets = meetRepository.findByStudentList_IdEquals(studentId);
         // TODO : meet size kontrol edilecek
-        for(Meet meet : meets){
+        for (Meet meet : meets) {
 
-            LocalTime existingStartTime =  meet.getStartTime();
-            LocalTime existingStopTime =  meet.getStopTime();
+            LocalTime existingStartTime = meet.getStartTime();
+            LocalTime existingStopTime = meet.getStopTime();
 
-            if(meet.getDate().equals(date) &&
+            if (meet.getDate().equals(date) &&
                     ((startTime.isAfter(existingStartTime) && startTime.isBefore(existingStopTime)) ||
                             // yeni gelen meetingin startTime bilgisi mevcut mettinglerden herhangi birinin startTim,e ve stopTime arasinda mi ???
                             (stopTime.isAfter(existingStartTime) && stopTime.isBefore(existingStopTime)) ||
                             //  yeni gelen meetingin stopTime bilgisi mevcut mettinglerden herhangi birinin startTim,e ve stopTime arasinda mi ???
                             (startTime.isBefore(existingStartTime) && stopTime.isAfter(existingStopTime)) ||
-                            (startTime.equals(existingStartTime) && stopTime.equals(existingStopTime)))){
+                            (startTime.equals(existingStartTime) && stopTime.equals(existingStopTime)))) {
                 throw new ConflictException(Messages.MEET_EXIST_MESSAGE);
             }
         }
 
     }
-    private MeetResponse createMeetResponse(Meet meet){
+
+    private MeetResponse createMeetResponse(Meet meet) {
         return MeetResponse.builder()
                 .id(meet.getId())
                 .date(meet.getDate())
@@ -123,8 +125,8 @@ public class MeetService {
     // Not :  getMeetById() ********************************************************************
     public ResponseMessage<MeetResponse> getMeetById(Long meetId) {
 
-        Meet meet = meetRepository.findById(meetId).orElseThrow(()->
-                new ResourceNotFoundException(String.format(Messages.MEET_NOT_FOUND_MESSAGE,meetId)));
+        Meet meet = meetRepository.findById(meetId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(Messages.MEET_NOT_FOUND_MESSAGE, meetId)));
 
         return ResponseMessage.<MeetResponse>builder()
                 .message("Meet Successfully found")
@@ -135,8 +137,8 @@ public class MeetService {
 
     // Not : getAllMeetByAdvisorAsPage() **************************************************
     public Page<MeetResponse> getAllMeetByAdvisorTeacherAsPage(String username, Pageable pageable) {
-        AdvisorTeacher advisorTeacher = advisorTeacherService.getAdvisorTeacherByUsername(username).orElseThrow(()->
-                new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE_WITH_USERNAME,username)));
+        AdvisorTeacher advisorTeacher = advisorTeacherService.getAdvisorTeacherByUsername(username).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE_WITH_USERNAME, username)));
 
         return meetRepository.findByAdvisorTeacher_IdEquals(advisorTeacher.getId(), pageable) // advisorTeacher.getMeet()
                 .map(this::createMeetResponse);
@@ -144,8 +146,8 @@ public class MeetService {
 
     public List<MeetResponse> getAllMeetByAdvisorTeacherAsList(String username) {
 
-        AdvisorTeacher advisorTeacher = advisorTeacherService.getAdvisorTeacherByUsername(username).orElseThrow(()->
-                new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE_WITH_USERNAME,username)));
+        AdvisorTeacher advisorTeacher = advisorTeacherService.getAdvisorTeacherByUsername(username).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE_WITH_USERNAME, username)));
 
         return meetRepository.getByAdvisorTeacher_IdEquals(advisorTeacher.getId())
                 .stream()
@@ -153,8 +155,9 @@ public class MeetService {
                 .collect(Collectors.toList());
     }
 
+    //********** delete() **********
     public ResponseMessage<?> delete(Long meetId) {
-        Meet meet = meetRepository.findById(meetId).orElseThrow(()->
+        Meet meet = meetRepository.findById(meetId).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(Messages.MEET_NOT_FOUND_MESSAGE, meetId)));
 
         meetRepository.deleteById(meetId);
@@ -168,22 +171,22 @@ public class MeetService {
     // Not :  update() ***********************************************************************
     public ResponseMessage<MeetResponse> update(UpdateMeetRequest meetRequest, Long meetId) {
 
-        Meet getMeet = meetRepository.findById(meetId).orElseThrow(()->
+        Meet getMeet = meetRepository.findById(meetId).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(Messages.MEET_NOT_FOUND_MESSAGE, meetId)));
 
         // !!! Time Control
-        if (TimeControl.check(meetRequest.getStartTime(),meetRequest.getStopTime())) {
+        if (TimeControl.check(meetRequest.getStartTime(), meetRequest.getStopTime())) {
             throw new BadRequestException(Messages.TIME_NOT_VALID_MESSAGE);
         }
 
         // !!! her ogrenci icin meet conflict kontrolu
         for (Long studentId : meetRequest.getStudentIds()) {
-            checkMeetConflict(studentId,meetRequest.getDate(),meetRequest.getStartTime(),meetRequest.getStopTime());
+            checkMeetConflict(studentId, meetRequest.getDate(), meetRequest.getStartTime(), meetRequest.getStopTime());
         }
 
         List<Student> students = studentService.getStudentByIds(meetRequest.getStudentIds());
         //!!! DTO--> POJO
-        Meet meet = createUpdatedMeet(meetRequest,meetId);
+        Meet meet = createUpdatedMeet(meetRequest, meetId);
         meet.setStudentList(students);
         meet.setAdvisorTeacher(getMeet.getAdvisorTeacher());
 
@@ -197,7 +200,7 @@ public class MeetService {
 
     }
 
-    private Meet createUpdatedMeet(UpdateMeetRequest updateMeetRequest, Long id){
+    private Meet createUpdatedMeet(UpdateMeetRequest updateMeetRequest, Long id) {
         return Meet.builder()
                 .id(id)
                 .startTime(updateMeetRequest.getStartTime())
@@ -208,7 +211,7 @@ public class MeetService {
     }
 
     public List<MeetResponse> getAllMeetByStudentByUsername(String username) {
-        Student student = studentService.getSudentByUsernameForOptional(username).orElseThrow(()->
+        Student student = studentService.getSudentByUsernameForOptional(username).orElseThrow(() ->
                 new ResourceNotFoundException(Messages.NOT_FOUND_USER_MESSAGE));
         return meetRepository.findByStudentList_IdEquals(student.getId())
                 .stream()
@@ -220,6 +223,7 @@ public class MeetService {
     // Not :  getAllWithPage() **********************************************************
     public Page<MeetResponse> search(int page, int size) {
 
-        Pageable pageable = PageRequest.of(page,size, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return meetRepository.findAll(pageable).map(this::createMeetResponse);
     }
+}

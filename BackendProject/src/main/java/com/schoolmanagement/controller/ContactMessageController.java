@@ -47,7 +47,8 @@ public class ContactMessageController {
     // Not: *********************************  getAll() ********************************************
     //Admin, mudur ve mudur yardimcisinin erisebilecegi bir method.
     @GetMapping("/getAll")  // http://localhost:8080/contactMessages/getAll
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')") // ASSISTANT_MANAGER bu sekilde mepleme yapar. ASSISTANTMANAGER bu sekilde mepleyemiyor. defaultta 2 kelime varsa
+    // arasa alt cizgi.
     // birazdan sana gonderecegim rollerden herhangi biri demek oluyor hasAnyAuthority. bu methodu birden cok role getirebilecek. Bu nedenle bu sekilde yaptik
     // bu methodda cok fazla data olabilir. Bu tur methodlar page ile yazilir. Page icinde one gonderecegimiz DTO muzu
     //yolluyoruz.
