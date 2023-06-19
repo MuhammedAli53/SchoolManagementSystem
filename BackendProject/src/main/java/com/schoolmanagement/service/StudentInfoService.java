@@ -155,6 +155,8 @@ public class StudentInfoService {
         Lesson lesson = lessonService.getLessonById(studentInfoRequest.getLessonId());
     // neden donen degeri pojo aliyoruz farkli servicelerde? cunku db ile islemimiz var. DTO olarak alirsak yine dto pojo donusumu yapmamiz lazim.
         StudentInfo getStudentInfo = getStudentInfoById(studentInfoId);
+
+        //
         EducationTerm educationTerm = educationTermService.getById(studentInfoRequest.getEducationTermId());
         //TODO : öğrencinin matematik ve fizik infosu olsa fiziği matematik yapmaya çalışırken hata fırlatmamız lazım
 
