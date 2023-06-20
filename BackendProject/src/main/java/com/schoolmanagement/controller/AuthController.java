@@ -44,7 +44,7 @@ public class AuthController {
         //valide edilen kullanici contexte atiliyor.
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //Jwt Token olusturuluyor.
-        String token = "Bearer " + jwtUtils.generateJwtToken(authentication);
+        String token = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         //currently login islemini gerceklestiren security katmanindaki userDetailsi bana gonderir. Userdetails oldugu icin onuın rolleri yok.

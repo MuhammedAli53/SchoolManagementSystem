@@ -20,7 +20,12 @@ import java.util.Objects;
 @RequestMapping("admin")
 @RequiredArgsConstructor
 public class AdminController {
-
+/*      admin auth username password.
+{
+    "username" : "Admin",
+    "password" : "12345678"
+}
+ */
     private final AdminService adminService;
 
     // Not: save()  *******************************************************

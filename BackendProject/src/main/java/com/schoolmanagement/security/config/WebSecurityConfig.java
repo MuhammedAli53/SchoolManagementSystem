@@ -79,8 +79,10 @@ public class WebSecurityConfig {
             "/*.js",
             "/*.json",
             "/contactMessages/save",
-            "/auth/login"
-
+            "/auth/login",
+            "/v3/api-docs/**", // ** her endpoint gelebilir anlamindadir.
+            "/swagger-ui/**",
+            "/swagger*/**" // swagger enpointten sonra gelen her seyi kapsar. yukardaki whitelisti kapsar yani.
     };
 
     @Bean

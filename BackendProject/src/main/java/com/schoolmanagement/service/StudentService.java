@@ -10,6 +10,7 @@ import com.schoolmanagement.payload.request.StudentRequest;
 import com.schoolmanagement.payload.response.ResponseMessage;
 import com.schoolmanagement.payload.response.StudentResponse;
 import com.schoolmanagement.repository.StudentRepository;
+import com.schoolmanagement.utils.CheckParameterUpdateMethod;
 import com.schoolmanagement.utils.CheckSameLessonProgram;
 import com.schoolmanagement.utils.FieldControl;
 import com.schoolmanagement.utils.Messages;
@@ -112,8 +113,10 @@ public class StudentService {
         {throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, studentRequest.getAdvisorTeacherId()));});
 
         //dublicate controlu
+        if (!CheckParameterUpdateMethod.checkParameter(student,studentRequest)){
+            fieldControl.checkDuplicate(studentRequest.getUsername(),studentRequest.getSsn(),studentRequest.getPhoneNumber(),studentRequest.getEmail());
+        }
 
-        fieldControl.checkDuplicate(studentRequest.getUsername(),studentRequest.getSsn(),studentRequest.getPhoneNumber(),studentRequest.getEmail());
 
 
         //dto -> pojo. yukarida yazmistik aslinda dto pojo donusumu ama orda id yok. rolu dto pojo donusum methodunda setledik. Burda ayri bir yerde

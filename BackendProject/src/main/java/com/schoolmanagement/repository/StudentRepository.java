@@ -20,7 +20,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     boolean existsByEmail(String email);
 
-    @Query(value = "Select (count(s>0)) From Student s "  ) // value degerini ister yaz ister yazma.
+    @Query(value = "Select (count(s)>0) From Student s "  ) // value degerini ister yaz ister yazma.
     boolean findStudent();
 
     @Query(value = "Select MAX(s.studentNumber) From Student s")
