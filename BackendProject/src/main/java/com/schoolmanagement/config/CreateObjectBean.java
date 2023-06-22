@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CreateObjectBean {
+    // bu kısmı kaldirabilirim.
 
     @Bean
     public DeanDto deanDTO() {
@@ -27,6 +28,11 @@ public class CreateObjectBean {
 
     @Bean
     public TeacherRequestDto teacherRequestDto() {
+        return new TeacherRequestDto();
+    }
+
+    @Bean
+    public TeacherRequestDto asd(){
         return new TeacherRequestDto();
     }
 }
