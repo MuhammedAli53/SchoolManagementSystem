@@ -103,4 +103,9 @@ public class LessonService {
         return lessonRepository.findByLessonIdEquals(lessonId);
     }
 
+    public List<Lesson> getLessonByLessonIdList(List<Long> lessons) {
+
+        return lessonRepository.getLessonByLessonIdList(lessons);
+    }
+
 }

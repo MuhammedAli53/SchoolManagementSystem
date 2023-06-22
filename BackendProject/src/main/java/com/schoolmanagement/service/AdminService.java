@@ -30,7 +30,6 @@ public class AdminService {
     private final TeacherRepository teacherRepository;
     private final GuestUserRepository guestUserRepository;
     private final FieldControl fieldControl;
-
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
 

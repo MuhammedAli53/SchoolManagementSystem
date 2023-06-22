@@ -35,8 +35,10 @@ public class StudentInfoController {
         // cunku teacher islem yapcak. Bunun icin httpServletRequest uzerinden datayi alaibliriz. attribute methoduna ogretmenin unique bir degerini koyariz ve olay biter.
         //isi on tarafa atmis oluyoruz. O react ile datayi alacak.
         // attribute olarak alicaz datayi. teacher username alicaz. bu nedenle teacher id almiyrouz dtoda.
-        String username = (String) httpServletRequest.getAttribute("username"); // bu kismi service de de yazabiliriz. Bu sekilde olursa donen data olarak username degil de
-        //httpServletRequest gondericez.
+       // String username = (String) httpServletRequest.getAttribute("username"); // bu kismi service de de yazabiliriz. Bu sekilde olursa donen data olarak username degil de
+        //httpServletRequest gondericez. biz aslinda burd aattribute uzerinden aldik. Ama postmanda header uzerinden setledik.
+        // bu nedenle attribute tarafini command aldik, datayi header ile cektik.
+        String username = httpServletRequest.getHeader("username");
         return studentInfoService.save(username, studentInfoRequestWithoutTeacherId);
     }
 

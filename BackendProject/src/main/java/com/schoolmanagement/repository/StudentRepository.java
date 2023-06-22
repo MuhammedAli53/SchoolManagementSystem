@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByUsername(String username);
@@ -40,4 +41,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query(value = "Select s From Student s Where s.username=:username")
     Optional<Student> findByUsernameEqualsForOptional(String username);
+
+    @Query(value = "Select s From Student s Where s.id IN :id")
+    Set<Student> findByIdsEquals(List<Long> id);
 }

@@ -224,4 +224,8 @@ public class TeacherService {
     public boolean existByUsername(String username) {
         return teacherRepository.existsByUsername(username);
     }
+
+    public Set<Teacher> getTeacherByIds(List<Long> teacherIdList) {
+        return teacherRepository.findByIdsEquals(teacherIdList);
+    }
 }

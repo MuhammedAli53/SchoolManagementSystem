@@ -1,13 +1,11 @@
 package com.schoolmanagement.service;
 
-import com.schoolmanagement.entity.concretes.EducationTerm;
-import com.schoolmanagement.entity.concretes.Lesson;
-import com.schoolmanagement.entity.concretes.LessonProgram;
-import com.schoolmanagement.entity.concretes.Teacher;
+import com.schoolmanagement.entity.concretes.*;
 import com.schoolmanagement.exception.BadRequestException;
 import com.schoolmanagement.exception.ResourceNotFoundException;
 import com.schoolmanagement.payload.dto.LessonProgramDto;
 import com.schoolmanagement.payload.request.LessonProgramRequest;
+import com.schoolmanagement.payload.request.LessonProgramRequestForUpdate;
 import com.schoolmanagement.payload.request.LessonRequest;
 import com.schoolmanagement.payload.response.LessonProgramResponse;
 import com.schoolmanagement.payload.response.ResponseMessage;
@@ -42,6 +40,10 @@ public class LessonProgramService {
     private final LessonProgramDto lessonProgramDto;
 
     private final CreateResponseObjectForService createResponseObjectForService;
+
+    private final StudentService studentService;
+
+    private final TeacherService teacherService;
 
     // bu islem bir program. lessonlari cekmemiz lazim. Bu nedenle lessonservice i buraya enjekte edicez
     public ResponseMessage<LessonProgramResponse> save(LessonProgramRequest request) {
@@ -193,4 +195,45 @@ public class LessonProgramService {
     public Set<LessonProgram> getLessonProgramById(Set<Long> lessonIdList) {
         return lessonProgramRepository.getLessonProgramByLessonProgramIdList(lessonIdList);
     }
+
+    /*// Not: update()*****************************************************************************
+    public ResponseMessage<LessonProgramResponse> update(Long lessonProgramId, LessonProgramRequestForUpdate lessonProgramRequest) {
+
+        LessonProgram lessonProgram = lessonProgramRepository.findById(lessonProgramId).orElseThrow(()->
+                new ResourceNotFoundException(Messages.LESSON_PROGRAM_NOT_FOUND_MESSAGE));
+
+        List<Lesson> lessons = lessonService.getLessonByLessonIdList(lessonProgramRequest.getLessonIdList());
+        EducationTerm educationTerm =  educationTermService.getById(lessonProgramRequest.getEducationTermId());
+
+        // !!! yukarda gelen lessons ici bos degilse zaman kontrolu yapiliyor :
+        if(lessons.size()==0) {
+            throw new ResourceNotFoundException(Messages.NOT_FOUND_LESSON_IN_LIST);
+        } else if(TimeControl.check(lessonProgramRequest.getStartTime(), lessonProgramRequest.getStopTime())) {
+            throw new BadRequestException(Messages.TIME_NOT_VALID_MESSAGE);
+        }
+
+        // !!! Ogrenci bilgileri guncellenecek
+        if(lessonProgramRequest.getStudentIdList() != null && !lessonProgramRequest.getStudentIdList().isEmpty()){
+            Set<Student> students = studentService.getStudentByIds(lessonProgramRequest.getStudentIdList());
+            lessonProgram.setStudents(students);
+        }
+        // !!! Ogretmen bilgileri guncelleniyor
+
+        if(lessonProgramRequest.getTeacherIdList() != null && !lessonProgramRequest.getTeacherIdList().isEmpty()){
+            Set<Teacher> teachers = teacherService.getTeacherByIds(lessonProgramRequest.getTeacherIdList());
+            lessonProgram.setTeachers(teachers);
+        }
+        lessonProgram.setLesson(lessons);
+        lessonProgram.setDay(lessonProgramRequest.getDay());
+        lessonProgram.setEducationTerm(educationTerm);
+        lessonProgram.setStartTime(lessonProgramRequest.getStartTime());
+        lessonProgram.setStopTime(lessonProgramRequest.getStopTime());
+
+        LessonProgram savedLessonProgram = lessonProgramRepository.save(lessonProgram);
+
+        return ResponseMessage.<LessonProgramResponse>builder()
+                .message("LessonProgram updated Successfully")
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }*/
 }

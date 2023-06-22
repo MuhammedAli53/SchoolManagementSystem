@@ -1,6 +1,7 @@
 package com.schoolmanagement.controller;
 
 import com.schoolmanagement.payload.request.LessonProgramRequest;
+import com.schoolmanagement.payload.request.LessonProgramRequestForUpdate;
 import com.schoolmanagement.payload.response.LessonProgramResponse;
 import com.schoolmanagement.payload.response.ResponseMessage;
 import com.schoolmanagement.service.LessonProgramService;
@@ -104,5 +105,14 @@ public class LessonProgramController {
     ){
         return lessonProgramService.search(page,size,sort,type);
     }
+    //************** update ********************
+ /*   @PutMapping("/update/{lessonProgramId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'ASSISTANTMANAGER', 'TEACHER')")
+    public ResponseMessage<LessonProgramResponse> update(@PathVariable Long lessonProgramId,
+                                                         @RequestBody @Valid LessonProgramRequestForUpdate lessonProgramRequest){
+        //burda student ve teacher de setleme eklicez. Bu nedenle yeni bir request acicaz. Cunku mevcut requestte teacher ve student
+        //update yok. Student ve teacher icinde kendilerine ait bir method var zaten. Ancak biz bu sekilde yapicaz bu methodu.
+        return lessonProgramService.update(lessonProgramId,lessonProgramRequest);
+    }*/
 
 }
